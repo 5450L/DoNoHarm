@@ -1,0 +1,97 @@
+body {
+  --secondary-gray: gray;
+}
+
+.navbar .container,
+.navbar-collapse ul {
+  flex-direction: column;
+}
+
+.navbar {
+  --primary-gray: rgb(#f8f9fa);
+  --secondary-gray: rgb(221, 225, 230);
+
+  --primary-textcolor: rgb(54, 54, 54);
+  --secondary-textcolor: rgb(81, 82, 90);
+
+
+  width: 14%;
+  height: 100vh;
+}
+
+.container {
+  align-self: flex-start;
+  justify-content: left;
+
+  padding: 0;
+}
+
+.navbar-brand {
+  margin-left: 0.5rem;
+}
+
+.navbar-brand,
+#navbarSupportedContent {
+  align-self: flex-start;
+}
+
+#navbarSupportedContent {
+  margin-top: 1rem;
+}
+
+#navbarSupportedContent li {
+  /* position: relative; */
+  margin-top: 0.25rem;
+  width: 14vw;
+}
+#navbarSupportedContent li:hover {
+  background-color: var(--secondary-gray);
+}
+
+.nav-item .nav-link {
+  padding: 0.375rem 0.75rem;
+  height: 2.5rem;
+}
+.nav-item button {
+  height: 2.5rem;
+}
+
+.patients-collapse {
+  text-align: left;
+  width: 100%;
+  padding-left: 0.75rem;
+  border-radius: 0;
+  border-style: none;
+  background-color: var(--primary-gray);
+  color: var(--primary-textcolor);
+}
+.patients-collapse:hover {
+  background-color: var(--secondary-gray);
+  color: var(--primary-textcolor);
+}
+.patients-collapse:focus{
+    background-color: var(--secondary-gray); 
+}
+
+#patientscollapse .card-body{
+    border-top: 0;
+    border-right: 0;
+    /* border-bottom: 1px; */
+    border-radius: 0;
+}
+.collapse-body-items {
+    width: 100% !important;
+    list-style-type: square;
+    
+}
+.collapse-body-items:hover {
+    background-color: var(--primary-gray) !important;
+}
+
+.collapse-body-items a{
+    text-decoration: none;
+    color: var(--secondary-textcolor);
+}
+.collapse-body-items a:hover{
+    text-decoration: underline;
+}

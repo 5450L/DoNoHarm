@@ -1,0 +1,18 @@
+<div class="conteiner">
+  <div class="row">
+    <h1>
+      {{ patient.fullName.name }} {{ patient.fullName.surname }}
+      {{ patient.fullName.lastname }}
+    </h1>
+    <ul>
+      <li>
+        <h3>Anamnesis:</h3>
+        <p>{{ patient.diseases }}</p>
+      </li>
+      <li>
+        <h3>Current prescriptions:</h3>
+        <p>{{ patient.currentPrescriptions }}</p>
+      </li>
+    </ul>
+  </div>
+</div>

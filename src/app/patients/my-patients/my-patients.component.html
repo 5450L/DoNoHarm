@@ -1,0 +1,15 @@
+<p>my-patients works!</p>
+<div class="container">
+  <div class="row">
+    <div id="patients-cards" *ngFor="let patient of myPatients">
+      <a routerLink="/patient"
+        ><h4>
+          {{ patient.fullName.name }} {{ patient.fullName.surname }}
+          {{ patient.fullName.lastname }}
+        </h4></a
+      >
+
+      <!-- <app-patient></app-patient> -->
+    </div>
+  </div>
+</div>

@@ -15,14 +15,14 @@ body {
   --secondary-textcolor: rgb(81, 82, 90);
 
 
-  width: 14%;
+  /* width: 14%; */
   height: 100vh;
 }
 
 .container {
   align-self: flex-start;
   justify-content: left;
-
+  
   padding: 0;
 }
 
@@ -40,9 +40,9 @@ body {
 }
 
 #navbarSupportedContent li {
-  /* position: relative; */
+  position: relative;
   margin-top: 0.25rem;
-  width: 14vw;
+  width:15vw;
 }
 #navbarSupportedContent li:hover {
   background-color: var(--secondary-gray);

@@ -1,1 +1,87 @@
 <p>add-new-patient works!</p>
+<div class="container">
+  <div class="row">
+    <form action="">
+      <h3>Patient`s personal info</h3>
+      <hr />
+      <ul>
+        <li>
+          <div class="personal-info">
+            <div class="name-input">
+              <label for="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                [(ngModel)]="newPatient.fullName.name"
+                name="name"
+              />
+            </div>
+            <div class="name-input">
+              <label for="surname">Surname</label>
+              <input
+                type="text"
+                id="surname"
+                [(ngModel)]="newPatient.fullName.surname"
+                name="surname"
+              />
+            </div>
+            <div class="name-input">
+              <label for="lastname">Last name</label>
+              <input
+                type="text"
+                id="lastname"
+                [(ngModel)]="newPatient.fullName.lastname"
+                name="lastname"
+              />
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="anamnesis">
+            <ul>
+              <li>
+                <div class="diseases">
+                  <div class="disease-input">
+                    <label for="disease">Add a disease</label>
+                    <input
+                      type="text"
+                      name="newdisease"
+                      id="disease"
+                      [(ngModel)]="newPatient.diseases"
+                      name="disease"
+                    />
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="prescriptions">
+                  <div class="prescriptions">
+                    <div class="prescription-input">
+                      <label for="prescription"
+                        >Add a prescription
+                        <span (click)="morePrescriptions()"
+                          ><strong>+</strong></span
+                        ></label
+                      >
+                      <input
+                        type="text"
+                        name="newprescription"
+                        id="prescription"
+                        [(ngModel)]="newPatient.currentPrescriptions[i]"
+                        name="prescription"
+                        *ngFor="let prescription of newPrescriptions; let i = index"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      <button class="btn btn-primary" type="submit" (click)="addPatient()">
+        Add Patient
+      </button>
+    </form>
+  </div>
+</div>

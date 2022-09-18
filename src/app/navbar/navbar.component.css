@@ -14,7 +14,6 @@ body {
   --primary-textcolor: rgb(54, 54, 54);
   --secondary-textcolor: rgb(81, 82, 90);
 
-
   /* width: 14%; */
   height: 100vh;
 }
@@ -22,7 +21,7 @@ body {
 .container {
   align-self: flex-start;
   justify-content: left;
-  
+
   padding: 0;
 }
 
@@ -36,13 +35,18 @@ body {
 }
 
 #navbarSupportedContent {
+  width: 100%;
   margin-top: 1rem;
+}
+
+ul{
+  width: 100%;
 }
 
 #navbarSupportedContent li {
   position: relative;
   margin-top: 0.25rem;
-  width:15vw;
+  width: 100%;
 }
 #navbarSupportedContent li:hover {
   background-color: var(--secondary-gray);
@@ -69,29 +73,29 @@ body {
   background-color: var(--secondary-gray);
   color: var(--primary-textcolor);
 }
-.patients-collapse:focus{
-    background-color: var(--secondary-gray); 
+.patients-collapse:focus {
+  background-color: var(--secondary-gray);
 }
 
-#patientscollapse .card-body{
-    border-top: 0;
-    border-right: 0;
-    /* border-bottom: 1px; */
-    border-radius: 0;
+#patientscollapse .card-body {
+  width: 100%;
+  border-top: 0;
+  border-right: 0;
+  /* border-bottom: 1px; */
+  border-radius: 0;
 }
 .collapse-body-items {
-    width: 100% !important;
-    list-style-type: square;
-    
+  width: 100% !important;
+  list-style-type: square;
 }
 .collapse-body-items:hover {
-    background-color: var(--primary-gray) !important;
+  background-color: var(--primary-gray) !important;
 }
 
-.collapse-body-items a{
-    text-decoration: none;
-    color: var(--secondary-textcolor);
+.collapse-body-items a {
+  text-decoration: none;
+  color: var(--secondary-textcolor);
 }
-.collapse-body-items a:hover{
-    text-decoration: underline;
+.collapse-body-items a:hover {
+  text-decoration: underline;
 }

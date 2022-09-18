@@ -12,11 +12,14 @@ export class PatientsService {
       this.defaultPrescriptions
     ),
     new Patient(
-        { name: 'Darya', surname: 'Alexiyevna', lastname: 'Pokryshkina' },
-  
-        this.defaultDiseases,
-        this.defaultPrescriptions
-      ),
+      { name: 'Darya', surname: 'Alexiyevna', lastname: 'Pokryshkina' },
+
+      this.defaultDiseases,
+      this.defaultPrescriptions
+    ),
   ];
-  
+
+  addToPatients(patient: Patient) {
+    this.patients.push(patient);
+  }
 }

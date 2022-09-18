@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Route } from '@angular/router';
 import { PatientsService } from '../patients.service';
 import { Patient } from './patient.model';
 
@@ -8,9 +9,15 @@ import { Patient } from './patient.model';
   styleUrls: ['./patient.component.css'],
 })
 export class PatientComponent implements OnInit {
-  
-  patient: Patient = this.patientsService.patients[0];
-  constructor(private patientsService:PatientsService) {}
+  patient!:Patient;
 
-  ngOnInit(): void {}
+  constructor(
+    private patientsService: PatientsService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
+    let chosenPatientId = +this.route.snapshot.params['id'];
+    this.patient= this.patientsService.patients[chosenPatientId];
+  }
 }

@@ -11,9 +11,9 @@ const routes: Routes = [
   {
     path: 'my-patients',
     component: MyPatientsComponent,
-    // children: [{ path: 'patient', component: PatientComponent }],
+    // children: [{ path: ':id', component: PatientComponent }],
   },
-  { path: 'patient', component: PatientComponent },
+  { path: 'my-patients/:id', component: PatientComponent },
   { path: 'add-new-patient', component: AddNewPatientComponent },
 ];
 

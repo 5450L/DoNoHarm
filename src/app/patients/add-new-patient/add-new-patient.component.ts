@@ -19,14 +19,15 @@ export class AddNewPatientComponent implements OnInit {
   };
 
   newPrescriptions: string[] = [''];
-  newPrescription = '';
 
   constructor(private patientsService: PatientsService) {}
 
   ngOnInit() {}
 
   morePrescriptions() {
-    this.newPrescriptions.push(this.newPrescription);
+    console.log(this.newPatient.currentPrescriptions)
+    this.newPrescriptions.push('');
+    console.log(this.newPatient.currentPrescriptions)
   }
 
   addPatient() {

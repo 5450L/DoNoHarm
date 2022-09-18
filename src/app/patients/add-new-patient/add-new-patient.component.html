@@ -67,9 +67,9 @@
                         type="text"
                         name="newprescription"
                         id="prescription"
-                        [(ngModel)]="newPatient.currentPrescriptions[i]"
-                        name="prescription"
                         *ngFor="let prescription of newPrescriptions; let i = index"
+                        [ngModelOptions]="{standalone:true}"
+                        [(ngModel)]="newPatient.currentPrescriptions[i]"                      
                       />
                     </div>
                   </div>

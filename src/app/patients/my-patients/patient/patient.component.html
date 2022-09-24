@@ -7,7 +7,10 @@
     <ul>
       <li>
         <h3>Anamnesis:</h3>
-        <p>{{ patient.diseases }}</p>
+        <!-- <p>{{ patient.diseases }}</p> -->
+        <ul>
+          <li *ngFor="let disease of patient.diseases">{{ disease }}</li>
+        </ul>
       </li>
       <li>
         <h3>Current prescriptions:</h3>

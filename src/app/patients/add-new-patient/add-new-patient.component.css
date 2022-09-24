@@ -1,32 +1,14 @@
-ul{
-    list-style: none;
-    padding: 0;
-}
-li{
-    margin-top: 1rem;
-}
-input{
-    margin-bottom: 0.4rem;
+.row {
+  margin-bottom: 2rem;
 }
 
-.personal-info{
-    display:flex;
-    flex-direction: row;
-    justify-content:flex-start;
-    gap: 2.5rem;
-    width: 70%;
-}
-.name-input, .disease-input, .prescription-input {
-  display: flex;
-  flex-direction: column;
-}
-.name-input{
-  width: 25%;
+.medInfo input {
+  margin-bottom: 1rem;
 }
 
-.disease-input, .prescription-input{
-    width: 70%;
-}
-textarea{
-    resize:none;
+.plus-button {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 1px 12px 2px 12px;
 }

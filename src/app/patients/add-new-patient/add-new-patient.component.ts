@@ -3,7 +3,6 @@ import {
   FormArray,
   FormControl,
   FormGroup,
-  NgForm,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -25,13 +24,15 @@ export class AddNewPatientComponent implements OnInit {
     diseases: [''],
     currentPrescriptions: [''],
   };
-  newPrescriptions: string[] = [''];
+  // newPrescriptions: string[] = [''];
 
-  newPatientForm: FormGroup;
+  newPatientForm: FormGroup = new FormGroup({});
+
+  diseasesArray: FormArray = new FormArray(<never>[]);
+  prescriptionsArray: FormArray = new FormArray(<never>[]);
 
   constructor(
     private patientsService: PatientsService,
-    private router: Router
   ) {}
 
   ngOnInit() {
@@ -41,45 +42,41 @@ export class AddNewPatientComponent implements OnInit {
         patientSecondName: new FormControl(null, Validators.required),
         patientLastName: new FormControl(null, Validators.required),
       }),
-      diseases: new FormArray([]),
-      prescriptions: new FormArray([]),
+      diseases: this.diseasesArray,
+      prescriptions: this.prescriptionsArray,
     });
   }
 
   onAddDisease() {
     let control = new FormControl(null, Validators.required);
-    (<FormArray>this.newPatientForm.get('diseases')).push(control);
+    this.diseasesArray.push(control);
   }
-  get diseases() {
-    return (this.newPatientForm.get('diseases') as FormArray).controls;
+  onDeleteDisease(index:number){
+    this.diseasesArray.removeAt(index);
   }
 
   onAddPrescription() {
     let control = new FormControl(null, Validators.required);
-    (<FormArray>this.newPatientForm.get('prescriptions')).push(control);
+    this.prescriptionsArray.push(control);
   }
-  get prescriptions() {
-    return (this.newPatientForm.get('prescriptions') as FormArray).controls;
+  onDeletePrescription(index:number){
+    this.prescriptionsArray.removeAt(index);
   }
 
   addPatient() {
-    console.log(this.newPatient);
     this.newPatient = {
       fullName: {
-        name: this.newPatientForm.get('patientData').get('patientName').value,
-        surname: this.newPatientForm.get('patientData').get('patientSecondName')
-          .value,
-        lastname: this.newPatientForm.get('patientData').get('patientLastName')
-          .value,
+        name: this.newPatientForm.get('patientData')?.get('patientName')?.value,
+        surname: this.newPatientForm.get('patientData')?.get('patientSecondName')?.value,
+        lastname: this.newPatientForm.get('patientData')?.get('patientLastName')?.value,
       },
-      diseases: this.newPatientForm.get('diseases').value,
-      currentPrescriptions: this.newPatientForm.get('prescriptions').value,
+      diseases: this.newPatientForm.get('diseases')?.value,
+      currentPrescriptions: this.newPatientForm.get('prescriptions')?.value,
     };
 
-    // this.newPatient.currentPrescriptions = this.newPrescriptions;
     this.patientsService.addToPatients(this.newPatient);
     this.newPatientForm.reset();
-    this.ngOnInit();
-    // this.router.navigate(['my-patients'])
+    this.diseasesArray.controls=[];
+    this.prescriptionsArray.controls=[];
   }
 }

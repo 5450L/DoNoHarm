@@ -1,7 +1,17 @@
-<div class="container">
+<div class="container" style="overflow-y: scroll">
   <div class="row">
     <form [formGroup]="newPatientForm" (ngSubmit)="addPatient()">
-      <h3>Patient`s personal info</h3>
+      <div class="form-head">
+        <h3>Patient`s personal info</h3>
+        <button
+          class="btn btn-primary"
+          id="add-patient-btn"
+          type="submit"
+          [disabled]="!newPatientForm.valid"
+        >
+          Add Patient
+        </button>
+      </div>
       <hr />
       <div class="form-group row" id="patientData" formGroupName="patientData">
         <div class="form-group col-md-3">
@@ -42,14 +52,17 @@
           >
             <span>Add a disease</span>
           </button>
-          <div class="form-group">
-            <!-- <input type="text" class="form-control" /> -->
-            <input
-              type="text"
-              class="form-control"
-              [formControlName]="i"
-              *ngFor="let disease of diseases; let i = index"
-            />
+          <div
+            class="form-group addeble-input"
+            *ngFor="let disease of diseasesArray.controls; let i = index"
+          >
+            <input type="text" class="form-control" [formControlName]="i" />
+            <button
+              class="btn btn-outline-danger btn-sm"
+              (click)="onDeleteDisease(i)"
+            >
+              delete
+            </button>
           </div>
         </div>
 
@@ -64,26 +77,24 @@
           >
             <span>Add a prescription</span>
           </button>
-          <div class="form-group">
-            <!-- <input type="text" class="form-control" /> -->
-            <input
-              type="text"
-              class="form-control"
-              [formControlName]="i"
-              *ngFor="let prescription of prescriptions; let i = index"
-            />
+          <div
+            class="form-group addeble-input"
+            *ngFor="
+              let prescription of prescriptionsArray.controls;
+              let i = index
+            "
+          >
+            <input type="text" class="form-control" [formControlName]="i" />
+            <button
+              class="btn btn-outline-danger btn-sm"
+              (click)="onDeletePrescription(i)"
+            >
+              delete
+            </button>
           </div>
         </div>
-      <hr />
-
+        <hr />
       </div>
-      <button
-        class="btn btn-primary"
-        type="submit"
-        [disabled]="!newPatientForm.valid"
-      >
-        Add Patient
-      </button>
     </form>
   </div>
 </div>

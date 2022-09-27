@@ -1,5 +1,6 @@
 body {
   --secondary-gray: gray;
+
 }
 
 .navbar .container,
@@ -15,7 +16,7 @@ body {
   --secondary-textcolor: rgb(81, 82, 90);
 
   /* width: 14%; */
-  height: 100vh;
+  height: 100%;
 }
 
 .container {
@@ -26,7 +27,9 @@ body {
 }
 
 .navbar-brand {
-  margin-left: 0.5rem;
+  margin-left: 0.75rem;
+
+  font-weight: 700;
 }
 
 .navbar-brand,

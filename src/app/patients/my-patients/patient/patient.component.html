@@ -1,23 +1,105 @@
-<div class="conteiner">
-  <div class="row">
-    <h1>
-      {{ patient.fullName.name }} {{ patient.fullName.surname }}
-      {{ patient.fullName.lastname }}
-    </h1>
-    <ul>
-      <li>
-        <h3>Anamnesis:</h3>
-        <!-- <p>{{ patient.diseases }}</p> -->
-        <ul>
-          <li *ngFor="let disease of patient.diseases">{{ disease }}</li>
-        </ul>
-      </li>
-      <li>
-        <h3>Current prescriptions:</h3>
-        <ul>
-          <li *ngFor="let prescription of patient.currentPrescriptions">{{ prescription }}</li>
-        </ul>
-      </li>
-    </ul>
-  </div>
+<div class="container">
+  <form [formGroup]="editPatientForm" (ngSubmit)="editPatient()">
+    <div class="form-head">
+      <h3>Patient`s personal info</h3>
+      <div class="head-buttons"><button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="!editPatientForm.valid"
+      >
+        Edit Patient
+      </button>
+      <button
+        class="btn btn-outline-danger"
+        id="add-patient-btn"
+        (click)="deletePatient()"
+      >
+        Delete Patient
+      </button></div>
+      
+    </div>
+    <hr />
+    <div class="form-group row" id="patientData" formGroupName="patientData">
+      <div class="form-group col-md-3">
+        <label for="patientName">Name </label>
+        <input
+          type="text"
+          id="patientName"
+          formControlName="patientName"
+          class="form-control"
+        />
+      </div>
+      <div class="form-group col-md-3">
+        <label for="patientName">Second Name</label>
+        <input
+          type="text"
+          id="patientSecondName"
+          formControlName="patientSecondName"
+          class="form-control"
+        />
+      </div>
+      <div class="form-group col-md-3">
+        <label for="patientName">Last Name</label>
+        <input
+          type="text"
+          id="patientLastName"
+          formControlName="patientLastName"
+          class="form-control"
+        />
+      </div>
+    </div>
+    <div class="row medInfo">
+      <div formArrayName="diseases">
+        <h5>Patient`s diseases</h5>
+        <button
+          class="btn btn-secondary plus-button"
+          type="button"
+          (click)="onAddDisease()"
+        >
+          <span>Add a disease</span>
+        </button>
+        <div
+          class="form-group addeble-input"
+          *ngFor="let disease of diseasesArray.controls; let i = index"
+        >
+          <input type="text" class="form-control" [formControlName]="i" />
+          <button
+            class="btn btn-outline-danger btn-sm"
+            (click)="onDeleteDisease(i)"
+          >
+            delete
+          </button>
+        </div>
+      </div>
+
+      <hr />
+
+      <div formArrayName="prescriptions">
+        <h5>Prescriptions</h5>
+        <button
+          class="btn btn-secondary plus-button"
+          type="button"
+          (click)="onAddPrescription()"
+        >
+          <span>Add a prescription</span>
+        </button>
+        <div
+          class="form-group addeble-input"
+          *ngFor="
+            let prescription of prescriptionsArray.controls;
+            let i = index
+          "
+        >
+          <input type="text" class="form-control" [formControlName]="i" />
+          <button
+            class="btn btn-outline-danger btn-sm"
+            (click)="onDeletePrescription(i)"
+          >
+            delete
+          </button>
+        </div>
+      </div>
+      <hr />
+    </div>
+  </form>
 </div>

@@ -49,6 +49,9 @@ export class PatientsService {
   }
 
   deletePatient(index: number) {
+    let ar: number[] = [1, 2, 3, 4];
+    ar.splice(0, 1);
+    console.log(ar);
     let show = this.patients.splice(index, 1);
     console.log(show);
   }

@@ -18,6 +18,7 @@ import { AddNewPatientComponent } from './patients/add-new-patient/add-new-patie
 import { MyPatientsComponent } from './patients/my-patients/my-patients.component';
 import { PatientComponent } from './patients/my-patients/patient/patient.component';
 import { PatientsService } from './patients/my-patients/patients.service';
+import { MatchComponent } from './match/match.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { PatientsService } from './patients/my-patients/patients.service';
     MyPatientsComponent,
     AddNewPatientComponent,
     PatientComponent,
+    MatchComponent,
   ],
   imports: [
     BrowserModule,

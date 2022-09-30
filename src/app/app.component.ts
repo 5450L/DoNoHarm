@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
-import * as firebase from 'firebase/compat';
-import { child, get, getDatabase, onValue, ref } from 'firebase/database';
+
 
 @Component({
   selector: 'app-root',
@@ -10,13 +8,25 @@ import { child, get, getDatabase, onValue, ref } from 'firebase/database';
 })
 export class AppComponent implements OnInit {
   title = 'do-no-harm';
-  dataBase = getDatabase();
-  constructor(private db: AngularFireDatabase) {}
+  
+
+  // addPrep(prepId:string) {
+  //   update(ref(this.dataBase, '/preps/'), {
+  //     prepId
+  //   });
+  // }
 
   ngOnInit(): void {
-    let prepRef = ref(this.dataBase);
-    get(child(prepRef,'preps/steroids/hydrocor')).then((snapshot)=>{
-      console.log(snapshot.val());
-    })
+    // let newPrep:string = 'morphin';
+    // get(child(this.prepRef, `preps/prep${this.id}`)).then((snapshot) => {
+    //   console.log(snapshot.val());
+    // });
+
+    // let anotherRef = ref(this.dataBase, `preps/prep${this.id}`);
+    // onValue(anotherRef, (snapshot) => {
+    //   this.data = snapshot.val();
+    // });
+
+    // this.addPrep(newPrep);
   }
 }

@@ -1,1 +1,17 @@
-<p>match works!</p>
+<details>
+  <summary class="h1">Match drugs</summary>
+  <p>In this section you can check compatibility of medcine</p>
+</details>
+
+<form [formGroup]="matchForm">
+
+  <input list="browsers" />
+  <datalist id="browsers">
+    <option value="Internet Explorer"></option>
+    <option value="Firefox"></option>
+    <option value="Chrome"></option>
+    <option value="Opera"></option>
+    <option value="Safari"></option>
+  </datalist>
+  
+</form>

@@ -1,17 +1,38 @@
 <details>
-  <summary class="h1">Match drugs</summary>
-  <p>In this section you can check compatibility of medcine</p>
+  <summary class="h1">Get info about drug</summary>
+  <p>In this section you can get quick info about chosen drug</p>
 </details>
 
 <form [formGroup]="matchForm">
+  <hr />
+  <div class="form-group col-md-5">
+    <label for="prepInput">Enter name of the drug</label>
+    <input
+      list="prepsList"
+      id="prepInput"
+      formControlName="prepInput"
+      class="form-control"
+    />
+    <datalist id="prepsList">
+      <option *ngFor="let name of names" value="{{ name }}"></option>
+    </datalist>
 
-  <input list="browsers" />
-  <datalist id="browsers">
-    <option value="Internet Explorer"></option>
-    <option value="Firefox"></option>
-    <option value="Chrome"></option>
-    <option value="Opera"></option>
-    <option value="Safari"></option>
-  </datalist>
-  
+    <button class="btn btn-success" (click)="onGet()">Get info</button>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="prepInfo">
+      <h4>{{prepName}}</h4>
+      <h5>{{prepGroup}}</h5>
+      <div class="contraindications">
+        <ul class="contrList" *ngFor="let drug of prepContrSubs"> Contraindicated drugs:
+          <li >{{drug}}</li>
+        </ul>
+        <ul class="contrList" *ngFor="let disease of prepContrDiseases">Inappropriate for diseases:
+          <li >{{disease}}</li>
+        </ul>
+        
+      </div>
+    </div>
+  </div>
 </form>

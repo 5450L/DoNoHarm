@@ -1,12 +1,10 @@
-
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getDatabase } from 'firebase/database';
 
-
 export const environment = {
   production: false,
-  firebaseConfig : {
+  firebaseConfig: {
     apiKey: 'AIzaSyC3Uo47jlUwfTTm94O6E01aUp05yozoLVU',
     authDomain: 'do-no-harm-3a3d3.firebaseapp.com',
     databaseURL:
@@ -18,5 +16,3 @@ export const environment = {
     measurementId: 'G-1QEXV1S5PP',
   },
 };
-
-

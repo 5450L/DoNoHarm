@@ -13,5 +13,6 @@ export class MyPatientsComponent implements OnInit {
 
   constructor(private patientsService: PatientsService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

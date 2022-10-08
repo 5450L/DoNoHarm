@@ -11,14 +11,8 @@ import {
   update,
 } from 'firebase/database';
 
+
 export class MatchService {
-   
-  dbDrugs?:string[];
-
-  dataBase = getDatabase();
-  prepRef = ref(this.dataBase);
-  constructor(private db: AngularFireDatabase) {}
-
-  
-
+  constructor() {
+  }
 }

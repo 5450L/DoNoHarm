@@ -9,6 +9,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { initializeApp } from 'firebase/app';
+import { getDatabase } from 'firebase/database';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +21,8 @@ import { MyPatientsComponent } from './patients/my-patients/my-patients.componen
 import { PatientComponent } from './patients/my-patients/patient/patient.component';
 import { PatientsService } from './patients/my-patients/patients.service';
 import { MatchComponent } from './match/match.component';
+
+
 
 @NgModule({
   declarations: [

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { DataSnapshot, getDatabase, onValue, ref, set } from 'firebase/database';
 import { AppModule } from 'src/app/app.module';
 import { Patient } from './patient/patient.model';
-import { PatientsService } from './patients.service';
 
 @Component({
   selector: 'app-my-patients',
@@ -9,10 +10,16 @@ import { PatientsService } from './patients.service';
   styleUrls: ['./my-patients.component.css'],
 })
 export class MyPatientsComponent implements OnInit {
-  myPatients: Patient[] = this.patientsService.patients;
+  myPatients: Patient[] = [];
+  dataBase = getDatabase();
 
-  constructor(private patientsService: PatientsService) {}
+  constructor(
+    private db: AngularFireDatabase
+  ) {}
 
   ngOnInit(): void {
+    onValue(ref(this.dataBase, '/patients'), (patients) => {
+      this.myPatients = patients.val();
+    });
   }
 }

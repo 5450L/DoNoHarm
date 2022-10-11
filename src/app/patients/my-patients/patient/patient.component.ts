@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { PatientsService } from '../patients.service';
+import { getDatabase, onValue, ref, remove, update } from 'firebase/database';
 import { Patient } from './patient.model';
 
 @Component({
@@ -10,52 +11,100 @@ import { Patient } from './patient.model';
   styleUrls: ['./patient.component.css'],
 })
 export class PatientComponent implements OnInit {
+  chosenPatient!: Patient;
+  dataBase = getDatabase();
+
   patient!: Patient;
+  patientData = new FormGroup({
+    patientName: new FormControl<string | null>(<never>null),
+    patientSecondName: new FormControl<string | null>(<never>null),
+    patientLastName: new FormControl<string | null>(<never>null),
+  });
   chosenPatientId!: number;
   editPatientForm: FormGroup = new FormGroup({});
   diseasesArray: FormArray = new FormArray(<never>[]);
   prescriptionsArray: FormArray = new FormArray(<never>[]);
 
   constructor(
-    private patientsService: PatientsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private db: AngularFireDatabase
   ) {}
 
   ngOnInit() {
     this.chosenPatientId = +this.route.snapshot.params['id'];
-    if (this.patientsService.patients[this.chosenPatientId]) {
-      this.patient = this.patientsService.patients[this.chosenPatientId];
-    } else {
-      this.router.navigate(['/my-patients']);
-    }
 
-    this.diseasesArray = this.patientsService.convertDiseasesToFormArray(
-      this.patient,
-      this.diseasesArray
-    );
-    this.prescriptionsArray =
-      this.patientsService.convertPrescriptionsToFormArray(
-        this.patient,
-        this.prescriptionsArray
-      );
-    this.editPatientForm = new FormGroup({
-      patientData: new FormGroup({
-        patientName: new FormControl(
-          this.patient.fullName.name,
-          Validators.required
-        ),
-        patientSecondName: new FormControl(
-          this.patient.fullName.surname,
-          Validators.required
-        ),
-        patientLastName: new FormControl(
-          this.patient.fullName.lastname,
-          Validators.required
-        ),
-      }),
-      diseases: this.diseasesArray,
-      prescriptions: this.prescriptionsArray,
+    onValue(ref(this.dataBase, '/patients'), (patients) => {
+      this.chosenPatient = patients.val()[this.chosenPatientId];
+
+      if (this.chosenPatient) {
+        this.patient = this.chosenPatient;
+      } else {
+        this.router.navigate(['/my-patients']);
+      }
+
+      if (this.chosenPatient.diseases) {
+        for (let i = 0; i < this.chosenPatient.diseases.length; i++) {
+          let control = new FormControl(
+            this.chosenPatient.diseases[i],
+            Validators.required
+          );
+          this.diseasesArray.push(control);
+        }
+      }
+
+      if (this.chosenPatient.currentPrescriptions) {
+        for (
+          let i = 0;
+          i < this.chosenPatient.currentPrescriptions.length;
+          i++
+        ) {
+          let control = new FormControl(
+            this.chosenPatient.currentPrescriptions[i],
+            Validators.required
+          );
+          this.prescriptionsArray.push(control);
+        }
+      }
+
+      if (this.chosenPatient.fullName) {
+        this.patientData = new FormGroup({
+          patientName: new FormControl(
+            this.patient.fullName.name,
+            Validators.required
+          ),
+          patientSecondName: new FormControl(
+            this.patient.fullName.surname,
+            Validators.required
+          ),
+          patientLastName: new FormControl(
+            this.patient.fullName.lastname,
+            Validators.required
+          ),
+        });
+      }
+
+      this.editPatientForm = new FormGroup({
+        patientData:this.patientData
+        
+        //  new FormGroup({
+        //   patientName: new FormControl(
+        //     this.patient.fullName.name,
+        //     Validators.required
+        //   ),
+        //   patientSecondName: new FormControl(
+        //     this.patient.fullName.surname,
+        //     Validators.required
+        //   ),
+        //   patientLastName: new FormControl(
+        //     this.patient.fullName.lastname,
+        //     Validators.required
+        //   ),
+        // })
+        ,
+        diseases: this.diseasesArray,
+        prescriptions: this.prescriptionsArray,
+      });
     });
   }
 
@@ -76,27 +125,28 @@ export class PatientComponent implements OnInit {
   }
 
   editPatient() {
-    this.patient = {
-      fullName: {
-        name: this.editPatientForm.get('patientData')?.get('patientName')
-          ?.value,
-        surname: this.editPatientForm
-          .get('patientData')
-          ?.get('patientSecondName')?.value,
-        lastname: this.editPatientForm
-          .get('patientData')
-          ?.get('patientLastName')?.value,
-      },
-      diseases: this.editPatientForm.get('diseases')?.value,
-      currentPrescriptions: this.editPatientForm.get('prescriptions')?.value,
-    };
-
-    this.patientsService.patients[this.chosenPatientId] = this.patient;
     this.router.navigate(['/my-patients']);
+    update(
+      ref(this.dataBase, '/patients/' + this.chosenPatientId),
+      (this.patient = {
+        fullName: {
+          name: this.editPatientForm.get('patientData')?.get('patientName')
+            ?.value,
+          surname: this.editPatientForm
+            .get('patientData')
+            ?.get('patientSecondName')?.value,
+          lastname: this.editPatientForm
+            .get('patientData')
+            ?.get('patientLastName')?.value,
+        },
+        diseases: this.editPatientForm.get('diseases')?.value,
+        currentPrescriptions: this.editPatientForm.get('prescriptions')?.value,
+      })
+    );
   }
 
   onDeletePatient() {
-    this.patientsService.deletePatient(this.chosenPatientId);
     this.router.navigate(['/my-patients']);
+    remove(ref(this.dataBase, '/patients/' + this.chosenPatientId));
   }
 }

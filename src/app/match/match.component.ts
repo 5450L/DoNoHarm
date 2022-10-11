@@ -57,10 +57,7 @@ export class MatchComponent implements OnInit {
           }
           for (let i = 1; i < prep.contr.diseases.length; i++) {
             this.prepContrDiseases?.push(prep.contr.diseases[i]);
-            console.log(this.prepContrDiseases);
           }
-
-          console.log(prep);
         }
       });
     });

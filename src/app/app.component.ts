@@ -19,7 +19,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // let newPrep:string = 'morphin';
     // get(child(this.prepRef, `preps/prep${this.id}`)).then((snapshot) => {
-    //   console.log(snapshot.val());
     // });
 
     // let anotherRef = ref(this.dataBase, `preps/prep${this.id}`);

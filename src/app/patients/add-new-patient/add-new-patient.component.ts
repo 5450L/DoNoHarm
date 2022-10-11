@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { getDatabase, onValue, push, ref, update } from 'firebase/database';
 import { Patient } from '../my-patients/patient/patient.model';
-import { PatientsService } from '../my-patients/patients.service';
 
 @Component({
   selector: 'app-add-new-patient',
@@ -15,6 +11,8 @@ import { PatientsService } from '../my-patients/patients.service';
   styleUrls: ['./add-new-patient.component.css'],
 })
 export class AddNewPatientComponent implements OnInit {
+  dataBase = getDatabase();
+
   newPatient = {
     fullName: {
       name: '',
@@ -24,7 +22,6 @@ export class AddNewPatientComponent implements OnInit {
     diseases: [''],
     currentPrescriptions: [''],
   };
-  // newPrescriptions: string[] = [''];
 
   newPatientForm: FormGroup = new FormGroup({});
 
@@ -32,7 +29,7 @@ export class AddNewPatientComponent implements OnInit {
   prescriptionsArray: FormArray = new FormArray(<never>[]);
 
   constructor(
-    private patientsService: PatientsService,
+    private db: AngularFireDatabase
   ) {}
 
   ngOnInit() {
@@ -51,7 +48,7 @@ export class AddNewPatientComponent implements OnInit {
     let control = new FormControl(null, Validators.required);
     this.diseasesArray.push(control);
   }
-  onDeleteDisease(index:number){
+  onDeleteDisease(index: number) {
     this.diseasesArray.removeAt(index);
   }
 
@@ -59,24 +56,42 @@ export class AddNewPatientComponent implements OnInit {
     let control = new FormControl(null, Validators.required);
     this.prescriptionsArray.push(control);
   }
-  onDeletePrescription(index:number){
+  onDeletePrescription(index: number) {
     this.prescriptionsArray.removeAt(index);
   }
 
   addPatient() {
-    this.newPatient = {
-      fullName: {
-        name: this.newPatientForm.get('patientData')?.get('patientName')?.value,
-        surname: this.newPatientForm.get('patientData')?.get('patientSecondName')?.value,
-        lastname: this.newPatientForm.get('patientData')?.get('patientLastName')?.value,
-      },
-      diseases: this.newPatientForm.get('diseases')?.value,
-      currentPrescriptions: this.newPatientForm.get('prescriptions')?.value,
-    };
+    let id = 0;
+    onValue(ref(this.dataBase, '/patients/'), (patients) => {
+      let check: boolean = true;
+      while (check === true) {
+        check = patients.hasChild('' + id);
+        if (check === true) {
+          id++;
+        }
+      }
+    });
+    update(
+      ref(this.dataBase, '/patients/' + id),
+      (this.newPatient = {
+        fullName: {
+          name: this.newPatientForm.get('patientData')?.get('patientName')
+            ?.value,
+          surname: this.newPatientForm
+            .get('patientData')
+            ?.get('patientSecondName')?.value,
+          lastname: this.newPatientForm
+            .get('patientData')
+            ?.get('patientLastName')?.value,
+        },
+        diseases: this.newPatientForm.get('diseases')?.value,
+        currentPrescriptions: this.newPatientForm.get('prescriptions')?.value,
+      })
+    );
 
-    this.patientsService.addToPatients(this.newPatient);
+    alert('Patient added');
     this.newPatientForm.reset();
-    this.diseasesArray.controls=[];
-    this.prescriptionsArray.controls=[];
+    this.diseasesArray.controls = [];
+    this.prescriptionsArray.controls = [];
   }
 }

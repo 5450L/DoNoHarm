@@ -1,0 +1,53 @@
+#patient-cards {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.patient-card {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem;
+
+  color: rgb(54, 54, 54);
+
+  border: 2px solid rgb(147, 147, 147);
+  border-radius: 4px;
+}
+.patient-card:hover {
+  border: 3px solid rgb(44, 44, 44);
+}
+.patient-card h4 {
+  align-self: center;
+  margin: 0;
+  width: 25%;
+  border-right: 1px solid rgb(173, 173, 173);
+}
+
+.card-list {
+  width: 40%;
+  margin-left: 4rem;
+  display: block;
+}
+
+.card-list ul {
+  display: grid;
+  column-gap: 1.25rem;
+  grid-template-columns: 1fr 1fr 1fr;
+
+}
+.card-list ul li{
+    width: 6rem;
+    
+}
+.card-list ul li p{
+  
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-transform:capitalize;
+
+}
+

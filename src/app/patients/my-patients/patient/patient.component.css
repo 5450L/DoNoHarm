@@ -1,6 +1,9 @@
 .container {
     max-height: 90vh;
-    margin-bottom: 2rem;
+    margin-top: 2rem;
+    overflow-y: auto;
+    text-transform:capitalize;
+
   }
   .form-head{
     margin-top: 1rem;
@@ -17,6 +20,10 @@
     margin-top: 1rem;
   }
   
+  input{
+  text-transform:capitalize;
+  }
+
   .medInfo input {
     margin-bottom: 1rem;
   }

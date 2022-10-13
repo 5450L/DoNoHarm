@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { async } from '@firebase/util';
 import { getDatabase, onValue, ref, remove, update } from 'firebase/database';
 import { Patient } from './patient.model';
 
@@ -15,11 +16,6 @@ export class PatientComponent implements OnInit {
   dataBase = getDatabase();
 
   patient!: Patient;
-  patientData = new FormGroup({
-    patientName: new FormControl<string | null>(<never>null),
-    patientSecondName: new FormControl<string | null>(<never>null),
-    patientLastName: new FormControl<string | null>(<never>null),
-  });
   chosenPatientId!: number;
   editPatientForm: FormGroup = new FormGroup({});
   diseasesArray: FormArray = new FormArray(<never>[]);
@@ -36,7 +32,6 @@ export class PatientComponent implements OnInit {
 
     onValue(ref(this.dataBase, '/patients'), (patients) => {
       this.chosenPatient = patients.val()[this.chosenPatientId];
-
       if (this.chosenPatient) {
         this.patient = this.chosenPatient;
       } else {
@@ -67,8 +62,8 @@ export class PatientComponent implements OnInit {
         }
       }
 
-      if (this.chosenPatient.fullName) {
-        this.patientData = new FormGroup({
+      this.editPatientForm = new FormGroup({
+        patientData: new FormGroup({
           patientName: new FormControl(
             this.patient.fullName.name,
             Validators.required
@@ -81,31 +76,13 @@ export class PatientComponent implements OnInit {
             this.patient.fullName.lastname,
             Validators.required
           ),
-        });
-      }
-
-      this.editPatientForm = new FormGroup({
-        patientData:this.patientData
-        
-        //  new FormGroup({
-        //   patientName: new FormControl(
-        //     this.patient.fullName.name,
-        //     Validators.required
-        //   ),
-        //   patientSecondName: new FormControl(
-        //     this.patient.fullName.surname,
-        //     Validators.required
-        //   ),
-        //   patientLastName: new FormControl(
-        //     this.patient.fullName.lastname,
-        //     Validators.required
-        //   ),
-        // })
-        ,
+        }),
         diseases: this.diseasesArray,
         prescriptions: this.prescriptionsArray,
       });
+     
     });
+    
   }
 
   onAddDisease() {

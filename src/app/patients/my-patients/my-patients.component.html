@@ -1,37 +1,41 @@
 <div class="container">
-<h1>My Patients</h1>
+  <h1>My Patients</h1>
 
   <div class="row">
-    <div class="col-sm-10">
+    <div class="col-sm-12">
       <div id="patients-cards">
         <div
           class="patient-card"
           *ngFor="let patient of myPatients; let id = index"
           [routerLink]="['/my-patients', id]"
         >
+
+        <div class="patient-card-title">
           <h4>
             {{ patient.fullName.name }} {{ patient.fullName.surname }}
             {{ patient.fullName.lastname }}
           </h4>
-
+        </div>
           <div class="card-list">
             <h6>Diseases:</h6>
-            <ul>    
-              <li *ngFor="let disease of patient.diseases"><p>{{disease}}</p></li>
+            <ul>
+              <li *ngFor="let disease of patient.diseases">
+                <p>{{ disease }}</p>
+              </li>
             </ul>
           </div>
-          
 
           <div class="card-list">
             <h6>Prescriptions:</h6>
-            <ul>            
-              <li *ngFor="let prescription of patient.currentPrescriptions"><p>{{prescription}}</p></li>
+            <ul>
+              <li *ngFor="let prescription of patient.currentPrescriptions">
+                <p>{{ prescription }}</p>
+              </li>
             </ul>
           </div>
-          
+
         </div>
       </div>
     </div>
-    <div></div>
   </div>
 </div>

@@ -1,29 +1,28 @@
-.container{
-  margin-bottom: 2rem;
+.container {
+  margin-top: 2rem;
   height: 90vh;
-
   overflow: auto;
 }
 
-.form-head{
+.form-head {
   margin-top: 1rem;
   margin-bottom: 1rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-.form-head button{
+.form-head button {
   margin-right: 1rem;
 }
 
-h5{
-  margin:1rem 0;
+h5 {
+  margin: 1rem 0;
 }
 
-input{
-  text-transform:capitalize;
-  }
-  
+input {
+  text-transform: capitalize;
+}
+
 .medInfo input {
   margin-bottom: 1rem;
 }
@@ -35,16 +34,38 @@ input{
   padding: 1px 12px 2px 12px;
 }
 
-.addeble-input{
+.addeble-input {
   display: flex;
   flex-direction: row;
 }
-.addeble-input button{
+.addeble-input button {
   text-align: center;
   margin-bottom: 1rem;
   margin-left: 0.5rem;
 }
 
-#add-patient-btn{
+#add-patient-btn {
   position: relative;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(58, 58, 58);
 }

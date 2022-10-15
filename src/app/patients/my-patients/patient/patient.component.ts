@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { async } from '@firebase/util';
 import { getDatabase, onValue, ref, remove, update } from 'firebase/database';
 import { Patient } from './patient.model';
 
@@ -21,6 +20,8 @@ export class PatientComponent implements OnInit {
   diseasesArray: FormArray = new FormArray(<never>[]);
   prescriptionsArray: FormArray = new FormArray(<never>[]);
 
+  regularExpression = '^[A-Z][a-z]*$'
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -29,6 +30,15 @@ export class PatientComponent implements OnInit {
 
   ngOnInit() {
     this.chosenPatientId = +this.route.snapshot.params['id'];
+    this.editPatientForm = new FormGroup({
+      patientData: new FormGroup({
+        patientName: new FormControl(null),
+        patientSecondName: new FormControl(null),
+        patientLastName: new FormControl(null),
+      }),
+      diseases: this.diseasesArray,
+      prescriptions: this.prescriptionsArray,
+    });
 
     onValue(ref(this.dataBase, '/patients'), (patients) => {
       this.chosenPatient = patients.val()[this.chosenPatientId];
@@ -41,8 +51,8 @@ export class PatientComponent implements OnInit {
       if (this.chosenPatient.diseases) {
         for (let i = 0; i < this.chosenPatient.diseases.length; i++) {
           let control = new FormControl(
-            this.chosenPatient.diseases[i],
-            Validators.required
+            this.transformStringForDatabase(this.chosenPatient.diseases[i]),
+            Validators.required,
           );
           this.diseasesArray.push(control);
         }
@@ -55,7 +65,7 @@ export class PatientComponent implements OnInit {
           i++
         ) {
           let control = new FormControl(
-            this.chosenPatient.currentPrescriptions[i],
+            this.transformStringForDatabase(this.chosenPatient.currentPrescriptions[i]),
             Validators.required
           );
           this.prescriptionsArray.push(control);
@@ -80,9 +90,7 @@ export class PatientComponent implements OnInit {
         diseases: this.diseasesArray,
         prescriptions: this.prescriptionsArray,
       });
-     
     });
-    
   }
 
   onAddDisease() {
@@ -103,18 +111,19 @@ export class PatientComponent implements OnInit {
 
   editPatient() {
     this.router.navigate(['/my-patients']);
+    this.transformStringForDatabase('sLAVA');
     update(
       ref(this.dataBase, '/patients/' + this.chosenPatientId),
       (this.patient = {
         fullName: {
-          name: this.editPatientForm.get('patientData')?.get('patientName')
-            ?.value,
-          surname: this.editPatientForm
+          name: this.transformStringForDatabase(this.editPatientForm.get('patientData')?.get('patientName')
+            ?.value),
+          surname: this.transformStringForDatabase(this.editPatientForm
             .get('patientData')
-            ?.get('patientSecondName')?.value,
-          lastname: this.editPatientForm
+            ?.get('patientSecondName')?.value),
+          lastname: this.transformStringForDatabase(this.editPatientForm
             .get('patientData')
-            ?.get('patientLastName')?.value,
+            ?.get('patientLastName')?.value),
         },
         diseases: this.editPatientForm.get('diseases')?.value,
         currentPrescriptions: this.editPatientForm.get('prescriptions')?.value,
@@ -125,5 +134,13 @@ export class PatientComponent implements OnInit {
   onDeletePatient() {
     this.router.navigate(['/my-patients']);
     remove(ref(this.dataBase, '/patients/' + this.chosenPatientId));
+  }
+
+  transformStringForDatabase(str: string) {
+    let transformedString: string;
+
+    transformedString = str[0].toUpperCase() + str.substring(1).toLowerCase();
+    console.log(transformedString);
+    return transformedString;
   }
 }

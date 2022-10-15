@@ -1,0 +1,11 @@
+.container {
+    max-height: 90vh;
+    margin-top: 2rem;
+    overflow-y: auto;
+    text-transform:capitalize;
+  }
+
+  
+  button{
+    margin:1rem auto ;
+  }

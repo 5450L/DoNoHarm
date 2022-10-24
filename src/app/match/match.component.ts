@@ -34,6 +34,7 @@ export class MatchComponent implements OnInit {
   constructor(private db: AngularFireDatabase) {}
 
   ngOnInit(): void {
+    this.prepExists = false;
     onValue(ref(this.dataBase, '/preps'), (snapshot) => {
       snapshot.val().forEach((prep: any) => {
         this.names?.push(prep.name);
@@ -45,21 +46,38 @@ export class MatchComponent implements OnInit {
   }
 
   onGet() {
+    this.prepName = '';
+    this.prepGroup = '';
+    this.prepContrSubs = [];
+    this.prepContrDiseases = [];
+    
     onValue(ref(this.dataBase, '/preps'), (snapshot) => {
       snapshot.val().forEach((prep: any) => {
         if (prep.name === this.matchForm.get('prepInput')?.value) {
           this.prepExists = true;
-          this.prepName = prep.name;
-          this.prepGroup = prep.group;
+          this.prepName = this.transformStringForDatabase(prep.name);
+          this.prepGroup = this.transformStringForDatabase(prep.group);
 
           for (let i = 1; i < prep.contr.substances.length; i++) {
-            this.prepContrSubs?.push(prep.contr.substances[i]);
+            this.prepContrSubs?.push(
+              this.transformStringForDatabase(prep.contr.substances[i])
+            );
           }
+
           for (let i = 1; i < prep.contr.diseases.length; i++) {
-            this.prepContrDiseases?.push(prep.contr.diseases[i]);
+            this.prepContrDiseases?.push(
+              this.transformStringForDatabase(prep.contr.diseases[i])
+            );
           }
         }
       });
     });
+  }
+
+  transformStringForDatabase(str: string) {
+    let transformedString: string;
+
+    transformedString = str[0].toUpperCase() + str.substring(1).toLowerCase();
+    return transformedString;
   }
 }

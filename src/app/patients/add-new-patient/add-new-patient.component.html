@@ -1,4 +1,4 @@
-<div class="container" >
+<div class="container">
   <div class="row">
     <form [formGroup]="newPatientForm" (ngSubmit)="addPatient()">
       <div class="form-head">
@@ -53,16 +53,18 @@
             <span>Add a disease</span>
           </button>
           <div
-            class="form-group addeble-input"
+            class="form-group addable-input"
             *ngFor="let disease of diseasesArray.controls; let i = index"
           >
-            <input type="text" class="form-control" [formControlName]="i" />
-            <button
-              class="btn btn-outline-danger btn-sm"
-              (click)="onDeleteDisease(i)"
-            >
-              delete
-            </button>
+            <div class="input-btn">
+              <input type="text" class="form-control" [formControlName]="i" />
+              <button
+                class="btn btn-outline-danger btn-sm"
+                (click)="onDeleteDisease(i)"
+              >
+                delete
+              </button>
+            </div>
           </div>
         </div>
 
@@ -78,19 +80,26 @@
             <span>Add a prescription</span>
           </button>
           <div
-            class="form-group addeble-input"
+            class="form-group addable-input"
             *ngFor="
               let prescription of prescriptionsArray.controls;
               let i = index
             "
           >
-            <input type="text" class="form-control" [formControlName]="i" />
-            <button
-              class="btn btn-outline-danger btn-sm"
-              (click)="onDeletePrescription(i)"
+            <div class="input-btn">
+              <input type="text" class="form-control" [formControlName]="i" />
+              <button
+                class="btn btn-outline-danger btn-sm"
+                (click)="onDeletePrescription(i)"
+              >
+                delete
+              </button>
+            </div>
+            <span
+              class="help-block"
+              *ngIf="!prescription.valid && prescription.touched"
+              >Inappropriate prescription</span
             >
-              delete
-            </button>
           </div>
         </div>
         <hr />

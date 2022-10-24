@@ -11,6 +11,7 @@ import { Patient } from './patient/patient.model';
 })
 export class MyPatientsComponent implements OnInit {
   myPatients: Patient[] = [];
+  // myPatients: any[] = [];
   dataBase = getDatabase();
 
   constructor(

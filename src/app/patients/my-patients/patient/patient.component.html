@@ -2,22 +2,23 @@
   <form [formGroup]="editPatientForm" (ngSubmit)="editPatient()">
     <div class="form-head">
       <h3>Patient`s personal info</h3>
-      <div class="head-buttons"><button
-        class="btn btn-primary"
-        type="submit"
-        [disabled]="!editPatientForm.valid"
-      >
-        Edit Patient
-      </button>
-      <button
-        class="btn btn-outline-danger"
-        id="add-patient-btn"
-        type="button"
-        (click)="onDeletePatient()"
-      >
-        Delete Patient
-      </button></div>
-      
+      <div class="head-buttons">
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!editPatientForm.valid"
+        >
+          Edit Patient
+        </button>
+        <button
+          class="btn btn-outline-danger"
+          id="add-patient-btn"
+          type="button"
+          (click)="onDeletePatient()"
+        >
+          Delete Patient
+        </button>
+      </div>
     </div>
     <hr />
     <div class="form-group row" id="patientData" formGroupName="patientData">
@@ -51,7 +52,7 @@
     </div>
     <div class="row medInfo">
       <div formArrayName="diseases">
-        <h5>Patient`s diseases</h5>
+        <h5>Patients diseases</h5>
         <button
           class="btn btn-secondary plus-button"
           type="button"
@@ -63,13 +64,15 @@
           class="form-group addeble-input"
           *ngFor="let disease of diseasesArray.controls; let i = index"
         >
-          <input type="text" class="form-control" [formControlName]="i" />
-          <button
-            class="btn btn-outline-danger btn-sm"
-            (click)="onDeleteDisease(i)"
-          >
-            delete
-          </button>
+          <div class="input-btn">
+            <input type="text" class="form-control" [formControlName]="i" />
+            <button
+              class="btn btn-outline-danger btn-sm"
+              (click)="onDeleteDisease(i)"
+            >
+              delete
+            </button>
+          </div>
         </div>
       </div>
 
@@ -84,6 +87,7 @@
         >
           <span>Add a prescription</span>
         </button>
+
         <div
           class="form-group addeble-input"
           *ngFor="
@@ -91,13 +95,22 @@
             let i = index
           "
         >
-          <input type="text" class="form-control" [formControlName]="i" />
-          <button
-            class="btn btn-outline-danger btn-sm"
-            (click)="onDeletePrescription(i)"
+          <div class="input-btn">
+            <input type="text" class="form-control" [formControlName]="i" />
+
+            <button
+              class="btn btn-outline-danger btn-sm"
+              (click)="onDeletePrescription(i)"
+            >
+              delete
+            </button>
+          </div>
+
+          <span
+            class="help-block"
+            *ngIf="!prescription.valid && prescription.touched"
+            >Inappropriate prescription</span
           >
-            delete
-          </button>
         </div>
       </div>
       <hr />

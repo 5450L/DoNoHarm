@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,7 +16,7 @@ import { Patient } from '../my-patients/patient/patient.model';
   templateUrl: './add-new-patient.component.html',
   styleUrls: ['./add-new-patient.component.css'],
 })
-export class AddNewPatientComponent implements OnInit {
+export class AddNewPatientComponent implements OnInit, DoCheck{
   dataBase = getDatabase();
 
   newPatient = {
@@ -25,22 +31,32 @@ export class AddNewPatientComponent implements OnInit {
 
   newPatientForm: FormGroup = new FormGroup({});
 
+  patientData: FormGroup = new FormGroup({
+    patientName: new FormControl(null, Validators.required),
+    patientSecondName: new FormControl(null, Validators.required),
+    patientLastName: new FormControl(null, Validators.required),
+  });
+
   diseasesArray: FormArray = new FormArray(<never>[]);
   prescriptionsArray: FormArray = new FormArray(<never>[]);
 
-  constructor(
-    private db: AngularFireDatabase
-  ) {}
+  constructor(private db: AngularFireDatabase) {}
 
   ngOnInit() {
     this.newPatientForm = new FormGroup({
-      patientData: new FormGroup({
-        patientName: new FormControl(null, Validators.required),
-        patientSecondName: new FormControl(null, Validators.required),
-        patientLastName: new FormControl(null, Validators.required),
-      }),
+      patientData: this.patientData,
       diseases: this.diseasesArray,
       prescriptions: this.prescriptionsArray,
+    });
+  }
+
+  ngDoCheck(): void {
+    this.prescriptionsArray.controls.forEach(control => {
+      control.updateValueAndValidity();
+    });
+
+    this.diseasesArray.controls.forEach(control =>{
+      control.updateValueAndValidity();
     });
   }
 
@@ -53,14 +69,21 @@ export class AddNewPatientComponent implements OnInit {
   }
 
   onAddPrescription() {
-    let control = new FormControl(null, Validators.required);
-    this.prescriptionsArray.push(control);
+    let control = new FormControl(null, [
+      Validators.required,
+      this.checkForCompatibility.bind(this),
+    ]);
+     this.prescriptionsArray.push(control);
   }
   onDeletePrescription(index: number) {
     this.prescriptionsArray.removeAt(index);
+    this.newPatientForm.updateValueAndValidity();
   }
 
   addPatient() {
+    // for(let i = 0; i < this.newPatient.diseases.length; i++){
+    //   this.newPatient.diseases[i]. = this.transformStringForDatabase(this.newPatient.diseases)
+    // }
     let id = 0;
     onValue(ref(this.dataBase, '/patients/'), (patients) => {
       let check: boolean = true;
@@ -71,27 +94,90 @@ export class AddNewPatientComponent implements OnInit {
         }
       }
     });
+
     update(
       ref(this.dataBase, '/patients/' + id),
       (this.newPatient = {
         fullName: {
-          name: this.newPatientForm.get('patientData')?.get('patientName')
-            ?.value,
-          surname: this.newPatientForm
-            .get('patientData')
-            ?.get('patientSecondName')?.value,
-          lastname: this.newPatientForm
-            .get('patientData')
-            ?.get('patientLastName')?.value,
+          name: this.transformStringForDB(
+            this.newPatientForm.get('patientData')?.get('patientName')?.value
+          ),
+          surname: this.transformStringForDB(
+            this.newPatientForm.get('patientData')?.get('patientSecondName')
+              ?.value
+          ),
+          lastname: this.transformStringForDB(
+            this.newPatientForm.get('patientData')?.get('patientLastName')
+              ?.value
+          ),
         },
-        diseases: this.newPatientForm.get('diseases')?.value,
-        currentPrescriptions: this.newPatientForm.get('prescriptions')?.value,
+        diseases: this.transformStringArrayForDB(
+          this.newPatientForm.get('diseases')?.value
+        ),
+        currentPrescriptions: this.transformStringArrayForDB(
+          this.newPatientForm.get('prescriptions')?.value
+        ),
       })
     );
 
-    alert('Patient added');
     this.newPatientForm.reset();
     this.diseasesArray.controls = [];
     this.prescriptionsArray.controls = [];
+    alert('Patient added');
+  }
+
+  transformStringForDB(str: string) {
+    let transformedString: string;
+
+    transformedString = str[0].toUpperCase() + str.substring(1).toLowerCase();
+    return transformedString;
+  }
+  transformStringArrayForDB(str: string[]) {
+    for (let i = 0; i < str.length; i++) {
+      str[i] = str[i][0].toUpperCase() + str[i].substring(1).toLowerCase();
+    }
+    return str;
+  }
+
+  checkForCompatibility(control: FormControl): { [s: string]: boolean } | null {
+    let _preps: any = [];
+
+    let contrSubs: string[] = [];
+    let contrDiseases: string[] = [];
+
+    onValue(ref(this.dataBase, '/preps'), (preps) => {
+      _preps = preps.val();
+      for (let i = 0; i < _preps.length; i++) {
+        if (control.value === _preps[i].name) {
+          if (_preps[i].contr.substances) {
+            contrSubs = _preps[i].contr.substances;
+          }
+          if (_preps[i].contr.diseases) {
+            contrDiseases = _preps[i].contr.diseases;
+          }
+        }
+      }
+    });
+
+    for (let i = 0; i < contrSubs.length; i++) {
+      for (let j = 0; j < this.prescriptionsArray.controls.length; j++) {
+        if (contrSubs[i] === this.prescriptionsArray.controls[j].value) {
+          return { Inappropriate: true };
+        } else {
+          continue;
+        }
+      }
+    }
+
+    for (let i = 0; i < contrDiseases.length; i++) {
+      for (let j = 0; j < this.diseasesArray.controls.length; j++) {
+        if (contrDiseases[i] === this.diseasesArray.controls[j].value) {
+          return { Inappropriate: true };
+        } else {
+          continue;
+        }
+      }
+    }
+    return null;
   }
 }

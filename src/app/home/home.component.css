@@ -1,0 +1,16 @@
+.container {
+  position: relative;
+  top: 10%;
+}
+.doc-intro {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+
+  margin-top: 1rem;
+}
+img {
+  position: relative;
+  width: 35%;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+}

@@ -9,11 +9,11 @@ import { MyPatientsComponent } from './patients/my-patients/my-patients.componen
 import { PatientComponent } from './patients/my-patients/patient/patient.component';
 
 const routes: Routes = [
+  { path: '', component: HomeComponent },
   { path: 'app-my-patients', component: MatchComponent },
   {
     path: 'my-patients',
     component: MyPatientsComponent,
-    // children: [{ path: ':id', component: PatientComponent }],
   },
   { path: 'my-patients/:id', component: PatientComponent },
   { path: 'add-new-patient', component: AddNewPatientComponent },

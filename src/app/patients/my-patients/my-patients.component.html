@@ -6,7 +6,7 @@
       <div id="patients-cards">
         <div
           class="patient-card"
-          *ngFor="let patient of myPatients; let id = index"
+          *ngFor="let patient of myPatients ; let id = index"
           [routerLink]="['/my-patients', id]"
         >
 
@@ -28,7 +28,7 @@
           <div class="card-list">
             <h6>Prescriptions:</h6>
             <ul>
-              <li *ngFor="let prescription of patient.currentPrescriptions">
+              <li *ngFor="let prescription of patient.prescriptions">
                 <p>{{ prescription }}</p>
               </li>
             </ul>

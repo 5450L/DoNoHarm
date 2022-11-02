@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <form [formGroup]="newPatientForm" (ngSubmit)="addPatient()">
+    <form [formGroup]="newPatientForm" (ngSubmit)="onAddPatient()">
       <div class="form-head">
         <h3>Patient`s personal info</h3>
         <button
@@ -13,31 +13,31 @@
         </button>
       </div>
       <hr />
-      <div class="form-group row" id="patientData" formGroupName="patientData">
+      <div class="form-group row" id="patientData" formGroupName="fullName">
         <div class="form-group col-md-3">
           <label for="patientName">Name</label>
           <input
             type="text"
             id="patientName"
-            formControlName="patientName"
+            formControlName="name"
             class="form-control"
           />
         </div>
         <div class="form-group col-md-3">
-          <label for="patientName">Second Name</label>
+          <label for="patienSecondtName">Second Name</label>
           <input
             type="text"
             id="patientSecondName"
-            formControlName="patientSecondName"
+            formControlName="surname"
             class="form-control"
           />
         </div>
         <div class="form-group col-md-3">
-          <label for="patientName">Last Name</label>
+          <label for="patientLastName">Last Name</label>
           <input
             type="text"
             id="patientLastName"
-            formControlName="patientLastName"
+            formControlName="lastname"
             class="form-control"
           />
         </div>

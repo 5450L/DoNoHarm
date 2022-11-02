@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
+import{HttpClientModule}from '@angular/common/http'
+
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 
@@ -40,7 +42,8 @@ import { MatchComponent } from './match/match.component';
     AngularFirestoreModule, // Only required for database features
     AngularFireAuthModule, // Only required for auth features,
     AngularFireStorageModule, // Only required for storage features
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent],

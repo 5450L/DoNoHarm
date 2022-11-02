@@ -9,14 +9,16 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { getDatabase, onValue, push, ref, update } from 'firebase/database';
+import { DataService } from '../data.service';
 import { Patient } from '../my-patients/patient/patient.model';
+import { PatientsService } from '../patients.service';
 
 @Component({
   selector: 'app-add-new-patient',
   templateUrl: './add-new-patient.component.html',
   styleUrls: ['./add-new-patient.component.css'],
 })
-export class AddNewPatientComponent implements OnInit, DoCheck{
+export class AddNewPatientComponent implements OnInit, DoCheck {
   dataBase = getDatabase();
 
   newPatient = {
@@ -26,36 +28,40 @@ export class AddNewPatientComponent implements OnInit, DoCheck{
       lastname: '',
     },
     diseases: [''],
-    currentPrescriptions: [''],
+    prescriptions: [''],
   };
 
   newPatientForm: FormGroup = new FormGroup({});
 
-  patientData: FormGroup = new FormGroup({
-    patientName: new FormControl(null, Validators.required),
-    patientSecondName: new FormControl(null, Validators.required),
-    patientLastName: new FormControl(null, Validators.required),
+  fullName: FormGroup = new FormGroup({
+    name: new FormControl(null, Validators.required),
+    surname: new FormControl(null, Validators.required),
+    lastname: new FormControl(null, Validators.required),
   });
 
   diseasesArray: FormArray = new FormArray(<never>[]);
   prescriptionsArray: FormArray = new FormArray(<never>[]);
 
-  constructor(private db: AngularFireDatabase) {}
+  constructor(
+    private db: AngularFireDatabase,
+    private patientsService: PatientsService,
+    private dataService: DataService
+  ) {}
 
   ngOnInit() {
     this.newPatientForm = new FormGroup({
-      patientData: this.patientData,
+      fullName: this.fullName,
       diseases: this.diseasesArray,
       prescriptions: this.prescriptionsArray,
     });
   }
 
   ngDoCheck(): void {
-    this.prescriptionsArray.controls.forEach(control => {
+    this.prescriptionsArray.controls.forEach((control) => {
       control.updateValueAndValidity();
     });
 
-    this.diseasesArray.controls.forEach(control =>{
+    this.diseasesArray.controls.forEach((control) => {
       control.updateValueAndValidity();
     });
   }
@@ -73,65 +79,69 @@ export class AddNewPatientComponent implements OnInit, DoCheck{
       Validators.required,
       this.checkForCompatibility.bind(this),
     ]);
-     this.prescriptionsArray.push(control);
+    this.prescriptionsArray.push(control);
   }
   onDeletePrescription(index: number) {
     this.prescriptionsArray.removeAt(index);
     this.newPatientForm.updateValueAndValidity();
   }
 
-  addPatient() {
-    // for(let i = 0; i < this.newPatient.diseases.length; i++){
-    //   this.newPatient.diseases[i]. = this.transformStringForDatabase(this.newPatient.diseases)
-    // }
-    let id = 0;
-    onValue(ref(this.dataBase, '/patients/'), (patients) => {
-      let check: boolean = true;
-      while (check === true) {
-        check = patients.hasChild('' + id);
-        if (check === true) {
-          id++;
-        }
-      }
-    });
-
-    update(
-      ref(this.dataBase, '/patients/' + id),
-      (this.newPatient = {
-        fullName: {
-          name: this.transformStringForDB(
-            this.newPatientForm.get('patientData')?.get('patientName')?.value
-          ),
-          surname: this.transformStringForDB(
-            this.newPatientForm.get('patientData')?.get('patientSecondName')
-              ?.value
-          ),
-          lastname: this.transformStringForDB(
-            this.newPatientForm.get('patientData')?.get('patientLastName')
-              ?.value
-          ),
-        },
-        diseases: this.transformStringArrayForDB(
-          this.newPatientForm.get('diseases')?.value
-        ),
-        currentPrescriptions: this.transformStringArrayForDB(
-          this.newPatientForm.get('prescriptions')?.value
-        ),
-      })
-    );
-
+  onAddPatient() {
+    this.newPatient = this.newPatientForm.value;
+    this.patientsService.addPatient(this.newPatient);
+    this.dataService.storePatients();
     this.newPatientForm.reset();
-    this.diseasesArray.controls = [];
-    this.prescriptionsArray.controls = [];
-    alert('Patient added');
   }
 
-  transformStringForDB(str: string) {
-    let transformedString: string;
+  // addPatient()
+  //   let id = 0;
+  //   onValue(ref(this.dataBase, '/patients/'), (patients) => {
+  //     let check: boolean = true;
+  //     while (check === true) {
+  //       check = patients.hasChild('' + id);
+  //       if (check === true) {
+  //         id++;
+  //       }
+  //     }
+  //   });
 
-    transformedString = str[0].toUpperCase() + str.substring(1).toLowerCase();
-    return transformedString;
-  }
+  //   update(
+  //     ref(this.dataBase, '/patients/' + id),
+  //     (this.newPatient = {
+  //       fullName: {
+  //         name: this.transformStringForDB(
+  //           this.newPatientForm.get('patientData')?.get('patientName')?.value
+  //         ),
+  //         surname: this.transformStringForDB(
+  //           this.newPatientForm.get('patientData')?.get('patientSecondName')
+  //             ?.value
+  //         ),
+  //         lastname: this.transformStringForDB(
+  //           this.newPatientForm.get('patientData')?.get('patientLastName')
+  //             ?.value
+  //         ),
+  //       },
+  //       diseases: this.transformStringArrayForDB(
+  //         this.newPatientForm.get('diseases')?.value
+  //       ),
+  //       currentPrescriptions: this.transformStringArrayForDB(
+  //         this.newPatientForm.get('prescriptions')?.value
+  //       ),
+  //     })
+  //   );
+
+  //   this.newPatientForm.reset();
+  //   this.diseasesArray.controls = [];
+  //   this.prescriptionsArray.controls = [];
+  //   alert('Patient added');
+  // }
+
+  // transformStringForDB(str: string) {
+  //   let transformedString: string;
+
+  //   transformedString = str[0].toUpperCase() + str.substring(1).toLowerCase();
+  //   return transformedString;
+  // }
   transformStringArrayForDB(str: string[]) {
     for (let i = 0; i < str.length; i++) {
       str[i] = str[i][0].toUpperCase() + str[i].substring(1).toLowerCase();

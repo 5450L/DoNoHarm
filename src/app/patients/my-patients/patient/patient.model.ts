@@ -5,15 +5,15 @@ export class Patient {
     lastname: string;
   };
   public diseases: string[];
-  public currentPrescriptions: string[];
+  public prescriptions: string[];
 
   constructor(
     fullName: { name: string; surname: string; lastname: string },
     diseases: string[],
-    currentPrescriptions: string[]
+    prescriptions: string[]
   ) {
     this.fullName = fullName;
     this.diseases = diseases;
-    this.currentPrescriptions = currentPrescriptions;
+    this.prescriptions = prescriptions;
   }
 }
